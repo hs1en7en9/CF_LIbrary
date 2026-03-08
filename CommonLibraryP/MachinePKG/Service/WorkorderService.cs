@@ -1,4 +1,4 @@
-﻿using CommonLibraryP.API;
+using CommonLibraryP.API;
 using CommonLibraryP.MachinePKG.EFModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,6 +80,18 @@ namespace CommonLibraryP.MachinePKG.Service
 
             _db.Workorders.Add(workorder);
             await _db.SaveChangesAsync();
+        }
+
+        /// <summary>取得工單表中所有不重複的生產線別（含匯入工單的 CP1/CP2/CS1/CA1 等），供報工頁下拉選單與設備線別合併使用。</summary>
+        public async Task<List<string>> GetAllDistinct生產線別Async()
+        {
+            return await _db.Workorders
+                .AsNoTracking()
+                .Where(x => !string.IsNullOrWhiteSpace(x.生產線別))
+                .Select(x => x.生產線別)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToListAsync();
         }
     }
 }

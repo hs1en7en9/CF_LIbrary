@@ -1,4 +1,4 @@
-﻿using CommonLibraryP.MachinePKG.EFModel;
+using CommonLibraryP.MachinePKG.EFModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -196,7 +196,12 @@ namespace CommonLibraryP.MachinePKG
 
             });
 
-            modelBuilder.Entity<WorkOrderPersonRecord>().HasKey(x => new { x.姓名, x.工單, x.時間 });
+            modelBuilder.Entity<WorkOrderPersonRecord>(entity =>
+            {
+                entity.HasKey(x => new { x.姓名, x.工單, x.時間 });
+                entity.Property(e => e.人員ID).HasMaxLength(50).IsRequired(false);
+                entity.Property(e => e.生產組別).HasMaxLength(100).IsRequired(false);
+            });
 
 
             modelBuilder.Entity<EquipmentSpec>(entity =>

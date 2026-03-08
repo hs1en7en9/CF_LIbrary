@@ -1,4 +1,4 @@
-﻿using CommonLibraryP.MachinePKG.EFModel;
+using CommonLibraryP.MachinePKG.EFModel;
 using DevExpress.ReportServer.ServiceModel.DataContracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,6 +61,17 @@ namespace CommonLibraryP.MachinePKG.Service
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>取得工單的開工時間（該工單狀態為 Run 的記錄中，最早的 報工時間）</summary>
+        public async Task<DateTime?> Get開工時間Async(string 工單)
+        {
+            if (string.IsNullOrWhiteSpace(工單)) return null;
+            var run = await _context.ReportWorkOrders
+                .Where(x => x.工單 == 工單 && x.狀態 == "Run")
+                .OrderBy(x => x.報工時間)
+                .FirstOrDefaultAsync();
+            return run?.報工時間;
+        }
+
         public async Task UpdateAsync(ReportWorkOrder entity)
         {
             _context.ReportWorkOrders.Update(entity);
@@ -88,6 +99,24 @@ namespace CommonLibraryP.MachinePKG.Service
             _context.ReportWorkOrders.Remove(exist);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        /// <summary>回填已完工(Finish)報工記錄的物料得率（依 廢料/工單發料量 計算）。供既有資料在移除 [NotMapped] 後執行一次。</summary>
+        /// <returns>實際更新的筆數</returns>
+        public async Task<int> Backfill物料得率Async()
+        {
+            var joined = await _context.ReportWorkOrders
+                .Where(r => r.狀態 == "Finish")
+                .Join(_context.Workorders, r => r.工單, w => w.工單號, (r, w) => new { Report = r, 工單發料量 = w.工單發料量 })
+                .Where(x => x.工單發料量 > 0)
+                .ToListAsync();
+            foreach (var x in joined)
+            {
+                x.Report.物料得率 = Math.Round(100m - (x.Report.廢料 / x.工單發料量) * 100m, 1);
+            }
+            if (joined.Count > 0)
+                await _context.SaveChangesAsync();
+            return joined.Count;
         }
     }
 }

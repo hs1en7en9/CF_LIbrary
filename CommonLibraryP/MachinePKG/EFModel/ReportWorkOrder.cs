@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -41,5 +41,7 @@ namespace CommonLibraryP.MachinePKG.EFModel
         public decimal 餘料 { get; set; }
         public decimal 廢料 { get; set; }
         public decimal 已完成料 { get; set; }
+        /// <summary>物料得率% = 100 - (廢料/工單發料量)*100，小數1位，寫入資料庫供後續分析。</summary>
+        public decimal 物料得率 { get; set; }
     }
 }

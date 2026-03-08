@@ -19,7 +19,9 @@ namespace CommonLibraryP.MachinePKG.Service
         }
 
 
-        public async Task AddPersonRecordAsync(string name, string workOrder, DateTime time, string status)
+        /// <param name="人員ID">可選，與 Personnal 勾稽供生產績效統計。</param>
+        /// <param name="生產組別">可選，與工單生產組別勾稽供生產績效統計。</param>
+        public async Task AddPersonRecordAsync(string name, string workOrder, DateTime time, string status, string? 人員ID = null, string? 生產組別 = null)
         {
             using (var scope = scopeFactory.CreateScope())
             {
@@ -29,7 +31,9 @@ namespace CommonLibraryP.MachinePKG.Service
                     姓名 = name,
                     工單 = workOrder,
                     時間 = time,
-                    狀態 = status
+                    狀態 = status,
+                    人員ID = 人員ID,
+                    生產組別 = 生產組別
                 };
                 dbContext.WorkOrderPersonRecords.Add(record);
                 await dbContext.SaveChangesAsync();

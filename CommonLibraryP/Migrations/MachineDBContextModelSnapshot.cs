@@ -878,6 +878,9 @@ namespace CommonLibraryP.Migrations
                         .HasPrecision(18, 6)
                         .HasColumnType("decimal(18,6)");
 
+                    b.Property<decimal>("物料得率")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("ID");
 
                     b.ToTable("ReportWorkOrders");
