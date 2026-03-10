@@ -45,6 +45,9 @@ namespace CommonLibraryP.MachinePKG
 
         public DbSet<ProblemDescript> ProblemDescripts { get; set; }
 
+        /// <summary>工單停工原因：報工執行 PAUSE 暫停時供選擇的停工原因列表。</summary>
+        public DbSet<WorkorderStopReason> WorkorderStopReasons { get; set; }
+
         public DbSet<ReportWorkOrder> ReportWorkOrders { get; set; }
         public DbSet<EquipmentSpecLimit> EquipmentSpecLimits { get; set; }
         public DbSet<InspecWOList> InspecWOLists { get; set; }

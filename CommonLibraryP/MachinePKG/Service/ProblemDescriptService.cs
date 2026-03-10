@@ -1,4 +1,4 @@
-﻿using CommonLibraryP.MachinePKG.EFModel;
+using CommonLibraryP.MachinePKG.EFModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommonLibraryP.MachinePKG.Service
@@ -42,6 +42,46 @@ namespace CommonLibraryP.MachinePKG.Service
             var exist = await _context.ProblemDescripts.FindAsync(defectCode);
             if (exist == null) return false;
             _context.ProblemDescripts.Remove(exist);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    }
+
+    public class WorkorderStopReasonService
+    {
+        private readonly MachineDBContext _context;
+
+        public WorkorderStopReasonService(MachineDBContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<WorkorderStopReason>> GetAllAsync()
+        {
+            return await _context.WorkorderStopReasons.ToListAsync();
+        }
+
+        public async Task<WorkorderStopReason?> GetByIdAsync(string code)
+        {
+            return await _context.WorkorderStopReasons.FindAsync(code);
+        }
+
+        public async Task UpsertAsync(WorkorderStopReason entity)
+        {
+            var exist = await _context.WorkorderStopReasons.FindAsync(entity.停工原因代碼);
+            if (exist == null)
+                _context.WorkorderStopReasons.Add(entity);
+            else
+                _context.Entry(exist).CurrentValues.SetValues(entity);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> DeleteAsync(string code)
+        {
+            var exist = await _context.WorkorderStopReasons.FindAsync(code);
+            if (exist == null) return false;
+            _context.WorkorderStopReasons.Remove(exist);
             await _context.SaveChangesAsync();
             return true;
         }

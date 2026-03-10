@@ -832,6 +832,27 @@ namespace CommonLibraryP.Migrations
                     b.ToTable("ProblemDescripts");
                 });
 
+            modelBuilder.Entity("CommonLibraryP.MachinePKG.EFModel.WorkorderStopReason", b =>
+                {
+                    b.Property<string>("停工原因代碼")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("備註")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("停工分類")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("停工原因名稱")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("停工原因代碼");
+
+                    b.ToTable("WorkorderStopReasons");
+                });
+
             modelBuilder.Entity("CommonLibraryP.MachinePKG.EFModel.ReportWorkOrder", b =>
                 {
                     b.Property<int>("ID")
