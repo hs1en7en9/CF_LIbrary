@@ -53,6 +53,31 @@ namespace CommonLibraryP.MachinePKG.Service
                 return names;
             }
         }
+
+        /// <summary>
+        /// 取得工單目前「仍在職」的人員姓名清單：
+        /// 每人最後一筆紀錄狀態為 Run（尚未被 Pause/Finish 移除）。
+        /// 頁面重載後可正確還原 WorkPersonnels，避免已移除人員重新出現。
+        /// </summary>
+        public async Task<List<string>> GetActivePersonNamesByWorkOrderAsync(string workOrderNo)
+        {
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<MachineDBContext>();
+                var activeNames = await Task.Run(() =>
+                    dbContext.WorkOrderPersonRecords
+                        .AsNoTracking()
+                        .Where(x => x.工單 == workOrderNo)
+                        .AsEnumerable()
+                        .GroupBy(x => x.姓名)
+                        .Where(g => string.Equals(
+                            g.OrderByDescending(r => r.時間).First().狀態,
+                            "Run", StringComparison.OrdinalIgnoreCase))
+                        .Select(g => g.Key)
+                        .ToList());
+                return activeNames;
+            }
+        }
         // 取得所有 Personnal
         public Task<List<Personnal>> GetAllPersonnals()
         {
