@@ -1,4 +1,4 @@
-﻿using CommonLibraryP.MachinePKG.EFModel;
+using CommonLibraryP.MachinePKG.EFModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommonLibraryP.MachinePKG.Service
@@ -27,15 +27,18 @@ namespace CommonLibraryP.MachinePKG.Service
             dbEntity.狀態 = entity.狀態;
             dbEntity.報工時間 = entity.報工時間;
             dbEntity.產生時間 = entity.產生時間;
-            dbEntity.報工人員 = entity.報工人員;
+            dbEntity.品檢人員 = entity.品檢人員;
+            dbEntity.完成時間 = entity.完成時間;
             dbEntity.Type = entity.Type;
-            //dbEntity.錯誤項目1 = entity.錯誤項目1;
-            //dbEntity.錯誤項目2 = entity.錯誤項目2;
-            //dbEntity.錯誤項目3 = entity.錯誤項目3;
-            //dbEntity.錯誤項目4 = entity.錯誤項目4;
-            //dbEntity.錯誤描述 = entity.錯誤描述;
             dbEntity.result = entity.result;
             dbEntity.改善時間 = entity.改善時間;
+            dbEntity.責任單位 = entity.責任單位;
+            dbEntity.錯誤項目 = entity.錯誤項目;
+            dbEntity.錯誤代碼 = entity.錯誤代碼;
+            dbEntity.分類 = entity.分類;
+            dbEntity.檢查數量 = entity.檢查數量;
+            dbEntity.NG數量 = entity.NG數量;
+            dbEntity.備註 = entity.備註;
             try
             {
                 await _context.SaveChangesAsync();

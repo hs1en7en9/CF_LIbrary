@@ -443,9 +443,12 @@ namespace CommonLibraryP.Migrations
                     b.Property<string>("分類")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("報工人員")
+                    b.Property<string>("品檢人員")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("完成時間")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("報工時間")
                         .HasColumnType("datetime2");
